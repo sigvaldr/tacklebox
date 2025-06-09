@@ -13,7 +13,9 @@ use std::process;
 use tar::Builder;
 use zstd::stream::Encoder;
 
+const VERSION: &str = "1.0.0";
 fn main() {
+    println!("RustArchiver v{} by Sigvaldr", VERSION);
     let args: Vec<String> = env::args().collect();
 
     if args.len() < 2 {
@@ -90,6 +92,8 @@ fn compress_folder(
     input_folder: &str,
     output_file: &Path,
 ) -> Result<(), Box<dyn std::error::Error>> {
+    let oname = output_file.to_string_lossy().to_string();
+    println!("Compressing {} into {}...", input_folder, oname);
     let tar_gz = File::create(output_file)?;
     let encoder = Encoder::new(tar_gz, 22)?; // Max compression level
     let mut tar_builder = Builder::new(encoder);
@@ -97,6 +101,7 @@ fn compress_folder(
     tar_builder.append_dir_all(".", input_folder)?;
     let encoder = tar_builder.into_inner()?; // Finish writing tar
     encoder.finish()?; // Finish compression
+    println!("Done.");
 
     Ok(())
 }

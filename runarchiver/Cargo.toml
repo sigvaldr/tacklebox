@@ -1,8 +1,9 @@
 [package]
 name = "runarchiver"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
 
 [dependencies]
+indicatif = "0.17.11"
 tar = "0.4.44"
 zstd = "0.13.3"

@@ -14,7 +14,9 @@ use std::process;
 use tar::Archive;
 use zstd::stream::read::Decoder;
 
+const VERSION: &str = "1.0.0";
 fn main() {
+    println!("RustUnArchiver v{} by Sigvaldr", VERSION);
     let args: Vec<String> = env::args().collect();
 
     if args.len() < 2 {
@@ -64,6 +66,8 @@ fn extract_archive(
     archive_path: &str,
     output_folder: &Path,
 ) -> Result<(), Box<dyn std::error::Error>> {
+    let oname = output_folder.to_string_lossy().to_string();
+    println!("Extracting {} into {}", archive_path, oname);
     let archive_file = File::open(archive_path)?;
     let decoder = Decoder::new(archive_file)?;
     let mut archive = Archive::new(decoder);
